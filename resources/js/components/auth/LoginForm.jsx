@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import ReactDOM from "react-dom/client";
-import WelcomeChallenger from "./WelcomeChallenger.jsx";
 
-const RegisterForm = () => {
+const LoginForm = () => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -23,8 +22,8 @@ const RegisterForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('/register', formData);
-            window.location.href = '/home'; // Redirect after successful registration
+            await axios.post('/login', formData);
+            window.location.href = '/home';
         } catch (error) {
             if (error.response && error.response.status === 422) {
                 setErrors(error.response.data.errors);
@@ -37,24 +36,9 @@ const RegisterForm = () => {
             <div className="row justify-content-center">
                 <div className="col-md-8">
                     <div className="card">
-                        <div className="card-header text-white bg-secondary">Register</div>
+                        <div className="card-header text-white bg-secondary">Login</div>
                         <div className="card-body bg-dark text-white">
                             <form onSubmit={handleSubmit}>
-                                <div className="mb-3">
-                                    <label htmlFor="name" className="form-label">Name</label>
-                                    <input
-                                        id="name"
-                                        type="text"
-                                        className={`form-control ${errors.name ? 'is-invalid' : ''}`}
-                                        name="name"
-                                        value={formData.name}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                    {errors.name && (
-                                        <div className="invalid-feedback">{errors.name[0]}</div>
-                                    )}
-                                </div>
 
                                 <div className="mb-3">
                                     <label htmlFor="email" className="form-label">Email Address</label>
@@ -88,21 +72,8 @@ const RegisterForm = () => {
                                     )}
                                 </div>
 
-                                <div className="mb-3">
-                                    <label htmlFor="password_confirmation" className="form-label">Confirm Password</label>
-                                    <input
-                                        id="password_confirmation"
-                                        type="password"
-                                        className="form-control"
-                                        name="password_confirmation"
-                                        value={formData.password_confirmation}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
-
                                 <div className="mb-0">
-                                    <button type="submit" className="btn button-basic text-white">Register</button>
+                                    <button type="submit" className="btn button-basic text-white">Login</button>
                                 </div>
                             </form>
                         </div>
@@ -113,13 +84,13 @@ const RegisterForm = () => {
     );
 };
 
-export default RegisterForm;
-const rootElement = document.getElementById('register');
+export default LoginForm;
+const rootElement = document.getElementById('login');
 if (rootElement) {
     const root = ReactDOM.createRoot(rootElement);
     root.render(
         <React.StrictMode>
-            <RegisterForm />
+            <LoginForm />
         </React.StrictMode>
     );
 }

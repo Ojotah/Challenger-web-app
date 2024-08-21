@@ -13,4 +13,5 @@ import './bootstrap';
  */
 
 import './components/WelcomeChallenger.jsx';
-import './components/RegisterForm.jsx';
+import './components/auth/RegisterForm.jsx';
+import './components/auth/LoginForm.jsx';
