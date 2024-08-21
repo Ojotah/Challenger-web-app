@@ -1,0 +1,26 @@
+// Body
+$body-bg: #f8fafc;
+$button-basic: linear-gradient(to right, #bdc3c7 0%, #2c3e50  51%, #bdc3c7  100%);
+// Typography
+$font-family-sans-serif: 'Nunito', sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+$gradient-bg:  linear-gradient(60deg, #29323c 0%, #485563 100%);
+
+// Apply gradient to body
+body {
+    background-image: $gradient-bg;
+
+}
+.button-basic {
+    background-image: $button-basic;
+}
+.button-basic {
+    background-image: linear-gradient(to right, #2c3e50 0%, #29323c 51%, #2c3e50 100%);
+    transition: background-image 1.3s ease-in-out; /* Smooth transition */
+}
+
+.button-basic:hover {
+    color: #1a1d20;
+    background-image: linear-gradient(to right, #2c3e50 0%, #bdc3c7 51%, #2c3e50 100%);
+}
