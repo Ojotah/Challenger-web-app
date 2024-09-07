@@ -1,16 +1,16 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants";
+import { CHALLENGE_STATUS_CLASS_MAP, CHALLENGE_STATUS_TEXT_MAP } from "@/constants";
 import { Head, Link } from "@inertiajs/react";
 
 export default function Dashboard({
   auth,
-  totalPendingTasks,
-  myPendingTasks,
-  totalProgressTasks,
-  myProgressTasks,
-  totalCompletedTasks,
-  myCompletedTasks,
-  activeTasks,
+  totalPendingChallenges,
+  myPendingChallenges,
+  totalProgressChallenges,
+  myProgressChallenges,
+  totalCompletedChallenges,
+  myCompletedChallenges,
+  activeChallenges,
 }) {
   return (
     <AuthenticatedLayout
@@ -28,33 +28,33 @@ export default function Dashboard({
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
               <h3 className="text-amber-500 text-2xl font-semibold">
-                Pending Tasks
+                Pending Challenges
               </h3>
               <p className="text-xl mt-4">
-                <span className="mr-2">{myPendingTasks}</span>/
-                <span className="ml-2">{totalPendingTasks}</span>
+                <span className="mr-2">{myPendingChallenges}</span>/
+                <span className="ml-2">{totalPendingChallenges}</span>
               </p>
             </div>
           </div>
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
               <h3 className="text-blue-500 text-2xl font-semibold">
-                In Progress Tasks
+                In Progress Challenges
               </h3>
               <p className="text-xl mt-4">
-                <span className="mr-2">{myProgressTasks}</span>/
-                <span className="ml-2">{totalProgressTasks}</span>
+                <span className="mr-2">{myProgressChallenges}</span>/
+                <span className="ml-2">{totalProgressChallenges}</span>
               </p>
             </div>
           </div>
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
               <h3 className="text-green-500 text-2xl font-semibold">
-                Completed Tasks
+                Completed Challenges
               </h3>
               <p className="text-xl mt-4">
-                <span className="mr-2">{myCompletedTasks}</span>/
-                <span className="ml-2">{totalCompletedTasks}</span>
+                <span className="mr-2">{myCompletedChallenges}</span>/
+                <span className="ml-2">{totalCompletedChallenges}</span>
               </p>
             </div>
           </div>
@@ -63,44 +63,44 @@ export default function Dashboard({
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
               <h3 className="text-gray-200 text-xl font-semibold">
-                My Active Tasks
+                My Active Challenges
               </h3>
 
               <table className="mt-3 w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                   <tr>
                     <th className="px-3 py-3">ID</th>
-                    <th className="px-3 py-3">Project Name</th>
+                    <th className="px-3 py-3">Category Name</th>
                     <th className="px-3 py-3">Name</th>
                     <th className="px-3 py-3">Status</th>
                     <th className="px-3 py-3">Due Date</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {activeTasks.data.map((task) => (
-                    <tr key={task.id}>
-                      <td className="px-3 py-2">{task.id}</td>
+                  {activeChallenges.data.map((challenge) => (
+                    <tr key={challenge.id}>
+                      <td className="px-3 py-2">{challenge.id}</td>
                       <td className="px-3 py-2 text-white hover:underline">
-                        <Link href={route("project.show", task.project.id)}>
-                          {task.project.name}
+                        <Link href={route("category.show", challenge.category.id)}>
+                          {challenge.category.name}
                         </Link>
                       </td>
                       <td className="px-3 py-2 text-white hover:underline">
-                        <Link href={route("task.show", task.id)}>
-                          {task.name}
+                        <Link href={route("challenge.show", challenge.id)}>
+                          {challenge.name}
                         </Link>
                       </td>
                       <td className="px-3 py-2">
                         <span
                           className={
                             "px-2 py-1 rounded text-nowrap text-white " +
-                            TASK_STATUS_CLASS_MAP[task.status]
+                            CHALLENGE_STATUS_CLASS_MAP[challenge.status]
                           }
                         >
-                          {TASK_STATUS_TEXT_MAP[task.status]}
+                          {CHALLENGE_STATUS_TEXT_MAP[challenge.status]}
                         </span>
                       </td>
-                      <td className="px-3 py-2 text-nowrap">{task.due_date}</td>
+                      <td className="px-3 py-2 text-nowrap">{challenge.due_date}</td>
                     </tr>
                   ))}
                 </tbody>

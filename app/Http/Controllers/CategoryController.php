@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProjectRequest;
-use App\Http\Requests\UpdateProjectRequest;
-use App\Http\Resources\ProjectResource;
-use App\Http\Resources\TaskResource;
-use App\Models\Project;
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\ChallengeResource;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class ProjectController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $query = Project::query();
+        $query = Category::query();
 
         $sortField = request('sort_field', 'created_at');
         $sortDirection = request('sort_direction', 'desc');
@@ -30,12 +30,12 @@ class ProjectController extends Controller
             $query->where('status', request('status'));
         }
 
-        $projects = $query->orderBy($sortField, $sortDirection)
+        $category = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)
             ->onEachSide(1);
 
-        return inertia('Project/Index', [
-            'projects' => ProjectResource::collection($projects),
+        return inertia('Category/Index', [
+            'categories' => CategoryResource::collection($category),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);
@@ -46,13 +46,13 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return inertia('Project/Create');
+        return inertia('Category/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProjectRequest $request)
+    public function store(StoreCategoryRequest $request)
     {
         $data = $request->validated();
         /** @var $image \Illuminate\Http\UploadedFile */
@@ -60,20 +60,20 @@ class ProjectController extends Controller
         $data['created_by'] = Auth::id();
         $data['updated_by'] = Auth::id();
         if ($image) {
-            $data['image_path'] = $image->store('project/'.Str::random(), 'public');
+            $data['image_path'] = $image->store('category/'.Str::random(), 'public');
         }
-        Project::create($data);
+        Category::create($data);
 
-        return to_route('project.index')
-            ->with('success', 'Project was created');
+        return to_route('category.index')
+            ->with('success', 'Category was created');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Project $project)
+    public function show(Category $category)
     {
-        $query = $project->tasks();
+        $query = $category->challenges();
 
         $sortField = request('sort_field', 'created_at');
         $sortDirection = request('sort_direction', 'desc');
@@ -85,13 +85,13 @@ class ProjectController extends Controller
             $query->where('status', request('status'));
         }
 
-        $tasks = $query->orderBy($sortField, $sortDirection)
+        $challenges = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)
             ->onEachSide(1);
 
-        return inertia('Project/Show', [
-            'project' => new ProjectResource($project),
-            'tasks' => TaskResource::collection($tasks),
+        return inertia('Category/Show', [
+            'category' => new CategoryResource($category),
+            'challenges' => ChallengeResource::collection($challenges),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);
@@ -100,45 +100,45 @@ class ProjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Project $project)
+    public function edit(Category $category)
     {
-        return inertia('Project/Edit', [
-            'project' => new ProjectResource($project),
+        return inertia('Category/Edit', [
+            'category' => new CategoryResource($category),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProjectRequest $request, Project $project)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
         $data = $request->validated();
         $image = $data['image'] ?? null;
         $data['updated_by'] = Auth::id();
         if ($image) {
-            if ($project->image_path) {
-                Storage::disk('public')->deleteDirectory(dirname($project->image_path));
+            if ($category->image_path) {
+                Storage::disk('public')->deleteDirectory(dirname($category->image_path));
             }
-            $data['image_path'] = $image->store('project/'.Str::random(), 'public');
+            $data['image_path'] = $image->store('category/'.Str::random(), 'public');
         }
-        $project->update($data);
+        $category->update($data);
 
-        return to_route('project.index')
-            ->with('success', "Project \"$project->name\" was updated");
+        return to_route('category.index')
+            ->with('success', "Category \"$category->name\" was updated");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Project $project)
+    public function destroy(Category $category)
     {
-        $name = $project->name;
-        $project->delete();
-        if ($project->image_path) {
-            Storage::disk('public')->deleteDirectory(dirname($project->image_path));
+        $name = $category->name;
+        $category->delete();
+        if ($category->image_path) {
+            Storage::disk('public')->deleteDirectory(dirname($category->image_path));
         }
 
-        return to_route('project.index')
-            ->with('success', "Project \"$name\" was deleted");
+        return to_route('category.index')
+            ->with('success', "Category \"$name\" was deleted");
     }
 }

@@ -5,26 +5,28 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Task extends Model
+class Challenge extends Model
 {
     use HasFactory;
+
+    protected $table = 'challenges';
 
     protected $fillable = [
         'name',
         'description',
         'image_path',
         'status',
-        'priority',
-        'due_date',
+        'difficulty',
+        'deadline',
         'assigned_user_id',
         'created_by',
         'updated_by',
-        'project_id',
+        'category_id',
     ];
 
-    public function project()
+    public function category()
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function assignedUser()

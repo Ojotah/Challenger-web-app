@@ -6,23 +6,23 @@ import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 
-export default function Create({ auth, task, projects, users }) {
+export default function Create({ auth, challenge, categories, users }) {
   const { data, setData, post, errors, reset } = useForm({
     image: "",
-    name: task.name || "",
-    status: task.status || "",
-    description: task.description || "",
-    due_date: task.due_date || "",
-    project_id: task.project_id || "",
-    priority: task.priority || "",
-    assigned_user_id: task.assigned_user_id || "",
+    name: challenge.name || "",
+    status: challenge.status || "",
+    description: challenge.description || "",
+    due_date: challenge.due_date || "",
+    category_id: challenge.category_id || "",
+    difficulty: challenge.difficulty || "",
+    assigned_user_id: challenge.assigned_user_id || "",
     _method: "PUT",
   });
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    post(route("task.update", task.id));
+    post(route("challenge.update", challenge.id));
   };
 
   return (
@@ -31,12 +31,12 @@ export default function Create({ auth, task, projects, users }) {
       header={
         <div className="flex justify-between items-center">
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Edit task "{task.name}"
+            Edit Challenge "{challenge.name}"
           </h2>
         </div>
       }
     >
-      <Head title="Tasks" />
+      <Head title="Challenges" />
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -45,35 +45,35 @@ export default function Create({ auth, task, projects, users }) {
               onSubmit={onSubmit}
               className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg"
             >
-              {task.image_path && (
+              {challenge.image_path && (
                 <div className="mb-4">
-                  <img src={task.image_path} className="w-64" />
+                  <img src={challenge.image_path} className="w-64" />
                 </div>
               )}
               <div>
-                <InputLabel htmlFor="task_project_id" value="Project" />
+                <InputLabel htmlFor="challenge_category_id" value="Category" />
 
                 <SelectInput
-                  name="project_id"
-                  id="task_project_id"
-                  value={data.project_id}
+                  name="category_id"
+                  id="challenge_category_id"
+                  value={data.category_id}
                   className="mt-1 block w-full"
-                  onChange={(e) => setData("project_id", e.target.value)}
+                  onChange={(e) => setData("category_id", e.target.value)}
                 >
-                  <option value="">Select Project</option>
-                  {projects.data.map((project) => (
-                    <option value={project.id} key={project.id}>
-                      {project.name}
+                  <option value="">Select Category</option>
+                  {categories.data.map((category) => (
+                    <option value={category.id} key={category.id}>
+                      {category.name}
                     </option>
                   ))}
                 </SelectInput>
 
-                <InputError message={errors.project_id} className="mt-2" />
+                <InputError message={errors.category_id} className="mt-2" />
               </div>
               <div className="mt-4">
-                <InputLabel htmlFor="task_image_path" value="Task Image" />
+                <InputLabel htmlFor="challenge_image_path" value="Challenge Image" />
                 <TextInput
-                  id="task_image_path"
+                  id="challenge_image_path"
                   type="file"
                   name="image"
                   className="mt-1 block w-full"
@@ -82,10 +82,10 @@ export default function Create({ auth, task, projects, users }) {
                 <InputError message={errors.image} className="mt-2" />
               </div>
               <div className="mt-4">
-                <InputLabel htmlFor="task_name" value="Task Name" />
+                <InputLabel htmlFor="challenge_name" value="Challenge Name" />
 
                 <TextInput
-                  id="task_name"
+                  id="challenge_name"
                   type="text"
                   name="name"
                   value={data.name}
@@ -98,12 +98,12 @@ export default function Create({ auth, task, projects, users }) {
               </div>
               <div className="mt-4">
                 <InputLabel
-                  htmlFor="task_description"
-                  value="Task Description"
+                  htmlFor="challenge_description"
+                  value="Challenge Description"
                 />
 
                 <TextAreaInput
-                  id="task_description"
+                  id="challenge_description"
                   name="description"
                   value={data.description}
                   className="mt-1 block w-full"
@@ -113,10 +113,10 @@ export default function Create({ auth, task, projects, users }) {
                 <InputError message={errors.description} className="mt-2" />
               </div>
               <div className="mt-4">
-                <InputLabel htmlFor="task_due_date" value="Task Deadline" />
+                <InputLabel htmlFor="challenge_due_date" value="Challenge Deadline" />
 
                 <TextInput
-                  id="task_due_date"
+                  id="challenge_due_date"
                   type="date"
                   name="due_date"
                   value={data.due_date}
@@ -127,11 +127,11 @@ export default function Create({ auth, task, projects, users }) {
                 <InputError message={errors.due_date} className="mt-2" />
               </div>
               <div className="mt-4">
-                <InputLabel htmlFor="task_status" value="Task Status" />
+                <InputLabel htmlFor="challenge_status" value="Challenge Status" />
 
                 <SelectInput
                   name="status"
-                  id="task_status"
+                  id="challenge_status"
                   value={data.status}
                   className="mt-1 block w-full"
                   onChange={(e) => setData("status", e.target.value)}
@@ -142,37 +142,37 @@ export default function Create({ auth, task, projects, users }) {
                   <option value="completed">Completed</option>
                 </SelectInput>
 
-                <InputError message={errors.task_status} className="mt-2" />
+                <InputError message={errors.challenge_status} className="mt-2" />
               </div>
 
               <div className="mt-4">
-                <InputLabel htmlFor="task_priority" value="Task Priority" />
+                <InputLabel htmlFor="challenge_priority" value="Challenge Priority" />
 
                 <SelectInput
                   name="priority"
-                  id="task_priority"
-                  value={data.priority}
+                  id="challenge_priority"
+                  value={data.difficulty}
                   className="mt-1 block w-full"
-                  onChange={(e) => setData("priority", e.target.value)}
+                  onChange={(e) => setData("difficulty", e.target.value)}
                 >
-                  <option value="">Select Priority</option>
+                  <option value="">Select Difficulty</option>
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
                   <option value="high">High</option>
                 </SelectInput>
 
-                <InputError message={errors.priority} className="mt-2" />
+                <InputError message={errors.difficulty} className="mt-2" />
               </div>
 
               <div className="mt-4">
                 <InputLabel
-                  htmlFor="task_assigned_user"
+                  htmlFor="challenge_assigned_user"
                   value="Assigned User"
                 />
 
                 <SelectInput
                   name="assigned_user_id"
-                  id="task_assigned_user"
+                  id="challenge_assigned_user"
                   value={data.assigned_user_id}
                   className="mt-1 block w-full"
                   onChange={(e) => setData("assigned_user_id", e.target.value)}
@@ -193,7 +193,7 @@ export default function Create({ auth, task, projects, users }) {
 
               <div className="mt-4 text-right">
                 <Link
-                  href={route("task.index")}
+                  href={route("challenge.index")}
                   className="bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2"
                 >
                   Cancel

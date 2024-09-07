@@ -2,14 +2,14 @@ import Pagination from "@/Components/Pagination";
 import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import TableHeading from "@/Components/TableHeading";
-import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants.jsx";
+import { CHALLENGE_STATUS_CLASS_MAP, CHALLENGE_STATUS_TEXT_MAP } from "@/constants.jsx";
 import { Link, router } from "@inertiajs/react";
 
-export default function TasksTable({
-  tasks,
+export default function ChallengesTable({
+  challenges,
   success,
   queryParams = null,
-  hideProjectColumn = false,
+  hideCategoryColumn = false,
 }) {
   queryParams = queryParams || {};
   const searchFieldChanged = (name, value) => {
@@ -19,7 +19,7 @@ export default function TasksTable({
       delete queryParams[name];
     }
 
-    router.get(route("task.index"), queryParams);
+    router.get(route("challenge.index"), queryParams);
   };
 
   const onKeyPress = (name, e) => {
@@ -39,16 +39,15 @@ export default function TasksTable({
       queryParams.sort_field = name;
       queryParams.sort_direction = "asc";
     }
-    router.get(route("task.index"), queryParams);
+    router.get(route("challenge.index"), queryParams);
   };
 
-  const deleteTask = (task) => {
-    if (!window.confirm("Are you sure you want to delete the task?")) {
+  const deleteChallenge = (challenge) => {
+    if (!window.confirm("Are you sure you want to delete the challenge?")) {
       return;
     }
-    router.delete(route("task.destroy", task.id));
+    router.delete(route("challenge.destroy", challenge.id));
   };
-
   return (
     <>
       {success && (
@@ -69,8 +68,8 @@ export default function TasksTable({
                 ID
               </TableHeading>
               <th className="px-3 py-3">Image</th>
-              {!hideProjectColumn && (
-                <th className="px-3 py-3">Project Name</th>
+              {!hideCategoryColumn && (
+                <th className="px-3 py-3">Category Name</th>
               )}
               <TableHeading
                 name="name"
@@ -115,12 +114,12 @@ export default function TasksTable({
             <tr className="text-nowrap">
               <th className="px-3 py-3"></th>
               <th className="px-3 py-3"></th>
-              {!hideProjectColumn && <th className="px-3 py-3"></th>}
+              {!hideCategoryColumn && <th className="px-3 py-3"></th>}
               <th className="px-3 py-3">
                 <TextInput
                   className="w-full"
                   defaultValue={queryParams.name}
-                  placeholder="Task Name"
+                  placeholder="Challenge Name"
                   onBlur={(e) => searchFieldChanged("name", e.target.value)}
                   onKeyPress={(e) => onKeyPress("name", e)}
                 />
@@ -144,43 +143,43 @@ export default function TasksTable({
             </tr>
           </thead>
           <tbody>
-            {tasks.data.map((task) => (
+            {challenges.data.map((challenge) => (
               <tr
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                key={task.id}
+                key={challenge.id}
               >
-                <td className="px-3 py-2">{task.id}</td>
+                <td className="px-3 py-2">{challenge.id}</td>
                 <td className="px-3 py-2">
-                  <img src={task.image_path} style={{ width: 60 }} />
+                  <img src={challenge.image_path} style={{ width: 60 }} />
                 </td>
-                {!hideProjectColumn && (
-                  <td className="px-3 py-2">{task.project.name}</td>
+                {!hideCategoryColumn && (
+                  <td className="px-3 py-2">{challenge.category.name}</td>
                 )}
                 <th className="px-3 py-2 text-gray-100 hover:underline">
-                  <Link href={route("task.show", task.id)}>{task.name}</Link>
+                  <Link href={route("challenge.show", challenge.id)}>{challenge.name}</Link>
                 </th>
                 <td className="px-3 py-2">
                   <span
                     className={
                       "px-2 py-1 rounded text-nowrap text-white " +
-                      TASK_STATUS_CLASS_MAP[task.status]
+                      CHALLENGE_STATUS_CLASS_MAP[challenge.status]
                     }
                   >
-                    {TASK_STATUS_TEXT_MAP[task.status]}
+                    {CHALLENGE_STATUS_TEXT_MAP[challenge.status]}
                   </span>
                 </td>
-                <td className="px-3 py-2 text-nowrap">{task.created_at}</td>
-                <td className="px-3 py-2 text-nowrap">{task.due_date}</td>
-                <td className="px-3 py-2">{task.createdBy.name}</td>
+                <td className="px-3 py-2 text-nowrap">{challenge.created_at}</td>
+                <td className="px-3 py-2 text-nowrap">{challenge.due_date}</td>
+                <td className="px-3 py-2">{challenge.createdBy.name}</td>
                 <td className="px-3 py-2 text-nowrap">
                   <Link
-                    href={route("task.edit", task.id)}
+                    href={route("challenge.edit", challenge.id)}
                     className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1"
                   >
                     Edit
                   </Link>
                   <button
-                    onClick={(e) => deleteTask(task)}
+                    onClick={(e) => deleteChallenge(challenge)}
                     className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1"
                   >
                     Delete
@@ -191,7 +190,7 @@ export default function TasksTable({
           </tbody>
         </table>
       </div>
-      <Pagination links={tasks.meta.links} />
+      <Pagination links={challenges.meta.links} />
     </>
   );
 }

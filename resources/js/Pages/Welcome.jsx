@@ -240,7 +240,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                         >
                                             Envoyer
                                         </a>{' '}
-                                        help you take your projects to the next level. Pair them with powerful open
+                                        help you take your categories to the next level. Pair them with powerful open
                                         source libraries like{' '}
                                         <a
                                             href="https://laravel.com/docs/billing"

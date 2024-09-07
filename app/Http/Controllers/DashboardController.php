@@ -2,55 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\TaskResource;
-use App\Models\Task;
+use App\Http\Resources\ChallengeResource;
+use App\Models\Challenge;
 
 class DashboardController extends Controller
 {
     public function index()
     {
         $user = auth()->user();
-        $totalPendingTasks = Task::query()
+        $totalPendingChallenges = Challenge::query()
             ->where('status', 'pending')
             ->count();
-        $myPendingTasks = Task::query()
+        $myPendingChallenges = Challenge::query()
             ->where('status', 'pending')
             ->where('assigned_user_id', $user->id)
             ->count();
 
-        $totalProgressTasks = Task::query()
+        $totalProgressChallenges = Challenge::query()
             ->where('status', 'in_progress')
             ->count();
-        $myProgressTasks = Task::query()
+        $myProgressChallenges = Challenge::query()
             ->where('status', 'in_progress')
             ->where('assigned_user_id', $user->id)
             ->count();
 
-        $totalCompletedTasks = Task::query()
+        $totalCompletedChallenges = Challenge::query()
             ->where('status', 'completed')
             ->count();
-        $myCompletedTasks = Task::query()
+        $myCompletedChallenges = Challenge::query()
             ->where('status', 'completed')
             ->where('assigned_user_id', $user->id)
             ->count();
 
-        $activeTasks = Task::query()
+        $activeChallenges = Challenge::query()
             ->whereIn('status', ['pending', 'in_progress'])
             ->where('assigned_user_id', $user->id)
             ->limit(10)
             ->get();
-        $activeTasks = TaskResource::collection($activeTasks);
+        $activeChallenges = ChallengeResource::collection($activeChallenges);
 
         return inertia(
             'Dashboard',
             compact(
-                'totalPendingTasks',
-                'myPendingTasks',
-                'totalProgressTasks',
-                'myProgressTasks',
-                'totalCompletedTasks',
-                'myCompletedTasks',
-                'activeTasks'
+                'totalPendingChallenges',
+                'myPendingChallenges',
+                'totalProgressChallenges',
+                'myProgressChallenges',
+                'totalCompletedChallenges',
+                'myCompletedChallenges',
+                'activeChallenges'
             )
         );
     }

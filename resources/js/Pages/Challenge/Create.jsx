@@ -6,7 +6,7 @@ import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 
-export default function Create({ auth }) {
+export default function Create({ auth, categories, users }) {
   const { data, setData, post, errors, reset } = useForm({
     image: "",
     name: "",
@@ -18,7 +18,7 @@ export default function Create({ auth }) {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    post(route("project.store"));
+    post(route("challenge.store"));
   };
 
   return (
@@ -27,12 +27,12 @@ export default function Create({ auth }) {
       header={
         <div className="flex justify-between items-center">
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Create new Project
+            Create new Challenge
           </h2>
         </div>
       }
     >
-      <Head title="Projects" />
+      <Head title="Challenges" />
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -42,12 +42,28 @@ export default function Create({ auth }) {
               className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg"
             >
               <div>
-                <InputLabel
-                  htmlFor="project_image_path"
-                  value="Project Image"
-                />
+                <InputLabel htmlFor="challengek_category_id" value="Category" />
+
+                <SelectInput
+                  name="category_id"
+                  id="challenge_category_id"
+                  className="mt-1 block w-full"
+                  onChange={(e) => setData("category_id", e.target.value)}
+                >
+                  <option value="">Select Category</option>
+                  {categories.data.map((category) => (
+                    <option value={category.id} key={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </SelectInput>
+
+                <InputError message={errors.category_id} className="mt-2" />
+              </div>
+              <div className="mt-4">
+                <InputLabel htmlFor="challenge_image_path" value="Challenge Image" />
                 <TextInput
-                  id="project_image_path"
+                  id="challenge_image_path"
                   type="file"
                   name="image"
                   className="mt-1 block w-full"
@@ -56,10 +72,10 @@ export default function Create({ auth }) {
                 <InputError message={errors.image} className="mt-2" />
               </div>
               <div className="mt-4">
-                <InputLabel htmlFor="project_name" value="Project Name" />
+                <InputLabel htmlFor="challenge_name" value="Challenge Name" />
 
                 <TextInput
-                  id="project_name"
+                  id="challenge_name"
                   type="text"
                   name="name"
                   value={data.name}
@@ -72,12 +88,12 @@ export default function Create({ auth }) {
               </div>
               <div className="mt-4">
                 <InputLabel
-                  htmlFor="project_description"
-                  value="Project Description"
+                  htmlFor="challenge_description"
+                  value="challenge Description"
                 />
 
                 <TextAreaInput
-                  id="project_description"
+                  id="challenge_description"
                   name="description"
                   value={data.description}
                   className="mt-1 block w-full"
@@ -87,13 +103,10 @@ export default function Create({ auth }) {
                 <InputError message={errors.description} className="mt-2" />
               </div>
               <div className="mt-4">
-                <InputLabel
-                  htmlFor="project_due_date"
-                  value="Project Deadline"
-                />
+                <InputLabel htmlFor="challenge_due_date" value="Challenge Deadline" />
 
                 <TextInput
-                  id="project_due_date"
+                  id="challenge_due_date"
                   type="date"
                   name="due_date"
                   value={data.due_date}
@@ -104,11 +117,11 @@ export default function Create({ auth }) {
                 <InputError message={errors.due_date} className="mt-2" />
               </div>
               <div className="mt-4">
-                <InputLabel htmlFor="project_status" value="Project Status" />
+                <InputLabel htmlFor="challenge_status" value="Challenge Status" />
 
                 <SelectInput
                   name="status"
-                  id="project_status"
+                  id="challenge_status"
                   className="mt-1 block w-full"
                   onChange={(e) => setData("status", e.target.value)}
                 >
@@ -118,11 +131,56 @@ export default function Create({ auth }) {
                   <option value="completed">Completed</option>
                 </SelectInput>
 
-                <InputError message={errors.project_status} className="mt-2" />
+                <InputError message={errors.challenge_status} className="mt-2" />
               </div>
+
+              <div className="mt-4">
+                <InputLabel htmlFor="challenge_difficulty" value="Challenge Difficulty" />
+
+                <SelectInput
+                  name="difficulty"
+                  id="challenge_difficulty"
+                  className="mt-1 block w-full"
+                  onChange={(e) => setData("difficulty", e.target.value)}
+                >
+                  <option value="">Select difficulty</option>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </SelectInput>
+
+                <InputError message={errors.difficulty} className="mt-2" />
+              </div>
+
+              <div className="mt-4">
+                <InputLabel
+                  htmlFor="challenge_assigned_user"
+                  value="Assigned User"
+                />
+
+                <SelectInput
+                  name="assigned_user_id"
+                  id="challenge_assigned_user"
+                  className="mt-1 block w-full"
+                  onChange={(e) => setData("assigned_user_id", e.target.value)}
+                >
+                  <option value="">Select User</option>
+                  {users.data.map((user) => (
+                    <option value={user.id} key={user.id}>
+                      {user.name}
+                    </option>
+                  ))}
+                </SelectInput>
+
+                <InputError
+                  message={errors.assigned_user_id}
+                  className="mt-2"
+                />
+              </div>
+
               <div className="mt-4 text-right">
                 <Link
-                  href={route("project.index")}
+                  href={route("challenge.index")}
                   className="bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2"
                 >
                   Cancel

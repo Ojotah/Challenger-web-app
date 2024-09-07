@@ -3,13 +3,13 @@ import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import {
-  PROJECT_STATUS_CLASS_MAP,
-  PROJECT_STATUS_TEXT_MAP,
+  CATEGORY_STATUS_CLASS_MAP,
+  CATEGORY_STATUS_TEXT_MAP,
 } from "@/constants.jsx";
 import { Head, Link, router } from "@inertiajs/react";
 import TableHeading from "@/Components/TableHeading";
 
-export default function Index({ auth, projects, queryParams = null, success }) {
+export default function Index({ auth, categories, queryParams = null, success }) {
   queryParams = queryParams || {};
   const searchFieldChanged = (name, value) => {
     if (value) {
@@ -18,7 +18,7 @@ export default function Index({ auth, projects, queryParams = null, success }) {
       delete queryParams[name];
     }
 
-    router.get(route("project.index"), queryParams);
+    router.get(route("category.index"), queryParams);
   };
 
   const onKeyPress = (name, e) => {
@@ -38,14 +38,14 @@ export default function Index({ auth, projects, queryParams = null, success }) {
       queryParams.sort_field = name;
       queryParams.sort_direction = "asc";
     }
-    router.get(route("project.index"), queryParams);
+    router.get(route("category.index"), queryParams);
   };
 
-  const deleteProject = (project) => {
-    if (!window.confirm("Are you sure you want to delete the project?")) {
+  const deleteCategory = (category) => {
+    if (!window.confirm("Are you sure you want to delete the category?")) {
       return;
     }
-    router.delete(route("project.destroy", project.id));
+    router.delete(route("category.destroy", category.id));
   };
 
   return (
@@ -54,10 +54,10 @@ export default function Index({ auth, projects, queryParams = null, success }) {
       header={
         <div className="flex justify-between items-center">
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Projects
+            Categories
           </h2>
           <Link
-            href={route("project.create")}
+            href={route("category.create")}
             className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
           >
             Add new
@@ -65,7 +65,7 @@ export default function Index({ auth, projects, queryParams = null, success }) {
         </div>
       }
     >
-      <Head title="Projects" />
+      <Head title="Categories" />
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -136,7 +136,7 @@ export default function Index({ auth, projects, queryParams = null, success }) {
                         <TextInput
                           className="w-full"
                           defaultValue={queryParams.name}
-                          placeholder="Project Name"
+                          placeholder="Category Name"
                           onBlur={(e) =>
                             searchFieldChanged("name", e.target.value)
                           }
@@ -164,46 +164,37 @@ export default function Index({ auth, projects, queryParams = null, success }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {projects.data.map((project) => (
+                    {categories.data.map((category) => (
                       <tr
                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                        key={project.id}
+                        key={category.id}
                       >
-                        <td className="px-3 py-2">{project.id}</td>
+                        <td className="px-3 py-2">{category.id}</td>
                         <td className="px-3 py-2">
-                          <img src={project.image_path} style={{ width: 60 }} />
+                          <img src={category.image_path} style={{ width: 60 }} />
                         </td>
                         <th className="px-3 py-2 text-gray-100 text-nowrap hover:underline">
-                          <Link href={route("project.show", project.id)}>
-                            {project.name}
+                          <Link href={route("category.show", category.id)}>
+                            {category.name}
                           </Link>
                         </th>
-                        <td className="px-3 py-2">
-                          <span
-                            className={
-                              "px-2 py-1 rounded text-white " +
-                              PROJECT_STATUS_CLASS_MAP[project.status]
-                            }
-                          >
-                            {PROJECT_STATUS_TEXT_MAP[project.status]}
-                          </span>
+
+                        <td className="px-3 py-2 text-nowrap">
+                          {category.created_at}
                         </td>
                         <td className="px-3 py-2 text-nowrap">
-                          {project.created_at}
+                          {category.due_date}
                         </td>
-                        <td className="px-3 py-2 text-nowrap">
-                          {project.due_date}
-                        </td>
-                        <td className="px-3 py-2">{project.createdBy.name}</td>
+                        <td className="px-3 py-2">{category.createdBy.name}</td>
                         <td className="px-3 py-2 text-nowrap">
                           <Link
-                            href={route("project.edit", project.id)}
+                            href={route("category.edit", category.id)}
                             className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1"
                           >
                             Edit
                           </Link>
                           <button
-                            onClick={(e) => deleteProject(project)}
+                            onClick={(e) => deleteCategory(category)}
                             className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1"
                           >
                             Delete
@@ -214,7 +205,7 @@ export default function Index({ auth, projects, queryParams = null, success }) {
                   </tbody>
                 </table>
               </div>
-              <Pagination links={projects.meta.links} />
+              <Pagination links={categories.meta.links} />
             </div>
           </div>
         </div>

@@ -4,24 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
-use App\Http\Resources\ProjectResource;
-use App\Http\Resources\TaskResource;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\ChallengeResource;
 use App\Http\Resources\UserResource;
-use App\Models\Project;
-use App\Models\Task;
+use App\Models\Category;
+use App\Models\Challenge;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class TaskController extends Controller
+class ChallengeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $query = Task::query();
+        $query = Challenge::query();
 
         $sortField = request('sort_field', 'created_at');
         $sortDirection = request('sort_direction', 'desc');
@@ -33,12 +33,12 @@ class TaskController extends Controller
             $query->where('status', request('status'));
         }
 
-        $tasks = $query->orderBy($sortField, $sortDirection)
+        $challenges = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)
             ->onEachSide(1);
 
-        return inertia('Task/Index', [
-            'tasks' => TaskResource::collection($tasks),
+        return inertia('Challenge/Index', [
+            'challenges' => ChallengeResource::collection($challenges),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);
@@ -49,11 +49,11 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $projects = Project::query()->orderBy('name', 'asc')->get();
+        $category = Category::query()->orderBy('name', 'asc')->get();
         $users = User::query()->orderBy('name', 'asc')->get();
 
-        return inertia('Task/Create', [
-            'projects' => ProjectResource::collection($projects),
+        return inertia('Challenge/Create', [
+            'category' => CategoryResource::collection($category),
             'users' => UserResource::collection($users),
         ]);
     }
@@ -69,35 +69,35 @@ class TaskController extends Controller
         $data['created_by'] = Auth::id();
         $data['updated_by'] = Auth::id();
         if ($image) {
-            $data['image_path'] = $image->store('task/'.Str::random(), 'public');
+            $data['image_path'] = $image->store('challenge/'.Str::random(), 'public');
         }
-        Task::create($data);
+        Challenge::create($data);
 
-        return to_route('task.index')
-            ->with('success', 'Task was created');
+        return to_route('challenge.index')
+            ->with('success', 'Challenge was created');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Task $task)
+    public function show(Challenge $challenge)
     {
-        return inertia('Task/Show', [
-            'task' => new TaskResource($task),
+        return inertia('Challenge/Show', [
+            'challenge' => new ChallengeResource($challenge),
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Task $task)
+    public function edit(Challenge $challenge)
     {
-        $projects = Project::query()->orderBy('name', 'asc')->get();
+        $category = Category::query()->orderBy('name', 'asc')->get();
         $users = User::query()->orderBy('name', 'asc')->get();
 
-        return inertia('Task/Edit', [
-            'task' => new TaskResource($task),
-            'projects' => ProjectResource::collection($projects),
+        return inertia('Challenge/Edit', [
+            'challenge' => new ChallengeResource($challenge),
+            'categories' => CategoryResource::collection($category),
             'users' => UserResource::collection($users),
         ]);
     }
@@ -105,42 +105,42 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTaskRequest $request, Task $task)
+    public function update(UpdateTaskRequest $request, Challenge $challenge)
     {
         $data = $request->validated();
         $image = $data['image'] ?? null;
         $data['updated_by'] = Auth::id();
         if ($image) {
-            if ($task->image_path) {
-                Storage::disk('public')->deleteDirectory(dirname($task->image_path));
+            if ($challenge->image_path) {
+                Storage::disk('public')->deleteDirectory(dirname($challenge->image_path));
             }
-            $data['image_path'] = $image->store('task/'.Str::random(), 'public');
+            $data['image_path'] = $image->store('challenge/'.Str::random(), 'public');
         }
-        $task->update($data);
+        $challenge->update($data);
 
-        return to_route('task.index')
-            ->with('success', "Task \"$task->name\" was updated");
+        return to_route('challenge.index')
+            ->with('success', "Challenge \"$challenge->name\" was updated");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Task $task)
+    public function destroy(Challenge $challenge)
     {
-        $name = $task->name;
-        $task->delete();
-        if ($task->image_path) {
-            Storage::disk('public')->deleteDirectory(dirname($task->image_path));
+        $name = $challenge->name;
+        $challenge->delete();
+        if ($challenge->image_path) {
+            Storage::disk('public')->deleteDirectory(dirname($challenge->image_path));
         }
 
-        return to_route('task.index')
-            ->with('success', "Task \"$name\" was deleted");
+        return to_route('challenge.index')
+            ->with('success', "Challenge \"$name\" was deleted");
     }
 
-    public function myTasks()
+    public function myChallenge()
     {
         $user = auth()->user();
-        $query = Task::query()->where('assigned_user_id', $user->id);
+        $query = Challenge::query()->where('assigned_user_id', $user->id);
 
         $sortField = request('sort_field', 'created_at');
         $sortDirection = request('sort_direction', 'desc');
@@ -152,12 +152,12 @@ class TaskController extends Controller
             $query->where('status', request('status'));
         }
 
-        $tasks = $query->orderBy($sortField, $sortDirection)
+        $challenge = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)
             ->onEachSide(1);
 
-        return inertia('Task/Index', [
-            'tasks' => TaskResource::collection($tasks),
+        return inertia('Challenge/Index', [
+            'challenges' => ChallengeResource::collection($challenge),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);

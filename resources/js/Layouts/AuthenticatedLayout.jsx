@@ -17,7 +17,6 @@ export default function AuthenticatedLayout({ user, header, children }) {
             <div className="flex">
               <div className="shrink-0 flex items-center">
                 <Link href="/">
-                  <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                 </Link>
               </div>
 
@@ -29,16 +28,16 @@ export default function AuthenticatedLayout({ user, header, children }) {
                   Dashboard
                 </NavLink>
                 <NavLink
-                  href={route("project.index")}
-                  active={route().current("project.index")}
+                  href={route("category.index")}
+                  active={route().current("category.index")}
                 >
-                  Projects
+                  Categories
                 </NavLink>
                 <NavLink
-                  href={route("task.index")}
-                  active={route().current("task.index")}
+                  href={route("challenge.index")}
+                  active={route().current("challenge.index")}
                 >
-                  All Tasks
+                  All Challenges
                 </NavLink>
                 <NavLink
                   href={route("user.index")}
@@ -47,10 +46,10 @@ export default function AuthenticatedLayout({ user, header, children }) {
                   Users
                 </NavLink>
                 <NavLink
-                  href={route("task.myTasks")}
-                  active={route().current("task.myTasks")}
+                  href={route("challenge.myChallenge")}
+                  active={route().current("challenge.myChallenge")}
                 >
-                  My Tasks
+                  My Challenges
                 </NavLink>
               </div>
             </div>
