@@ -10,8 +10,9 @@ export default function AuthenticatedLayout({ user, header, children }) {
     useState(false);
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-      <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+    <div className="min-h-screen bg-color-challenger">
+      <nav className="flex justify-center p-3">
+          <div className="bg-white dark:bg-gray-800 border-b border-gray-100 rounded-full dark:border-gray-700 w-3/4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex">
@@ -135,6 +136,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
             </div>
           </div>
         </div>
+        </div>
 
         <div
           className={
@@ -177,7 +179,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
       </nav>
 
       {header && (
-        <header className="bg-white dark:bg-gray-800 shadow">
+        <header>
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             {header}
           </div>

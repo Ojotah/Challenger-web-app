@@ -34,7 +34,7 @@ class ChallengeController extends Controller
         }
 
         $challenges = $query->orderBy($sortField, $sortDirection)
-            ->paginate(10)
+            ->paginate(12)
             ->onEachSide(1);
 
         return inertia('Challenge/Index', [
@@ -137,7 +137,7 @@ class ChallengeController extends Controller
             ->with('success', "Challenge \"$name\" was deleted");
     }
 
-    public function myChallenge()
+    public function myChallenges()
     {
         $user = auth()->user();
         $query = Challenge::query()->where('assigned_user_id', $user->id);
@@ -152,12 +152,12 @@ class ChallengeController extends Controller
             $query->where('status', request('status'));
         }
 
-        $challenge = $query->orderBy($sortField, $sortDirection)
+        $challenges = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)
             ->onEachSide(1);
 
         return inertia('Challenge/Index', [
-            'challenges' => ChallengeResource::collection($challenge),
+            'challenges' => ChallengeResource::collection($challenges),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
         ]);

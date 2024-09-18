@@ -14,7 +14,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('dashboard');
 
     Route::resource('category', CategoryController::class);
-    Route::get('/challenge/my-challenge', [ChallengeController::class, 'myChallenge'])
+    Route::get('/challenge/my-challenge', [ChallengeController::class, 'myChallenges'])
         ->name('challenge.myChallenge');
     Route::resource('challenge', ChallengeController::class);
     Route::resource('user', UserController::class);

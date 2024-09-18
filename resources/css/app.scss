@@ -1,0 +1,14 @@
+@import '@sweetalert2/theme-dark/dark.scss';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+//The main background color for the application.
+$bg-color: rgba(0, 9, 19, 0.98);
+
+.bg-color-challenger{
+    background-color: $bg-color;
+}
+

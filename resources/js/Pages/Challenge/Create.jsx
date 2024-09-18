@@ -6,7 +6,7 @@ import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 
-export default function Create({ auth, categories, users }) {
+export default function Create({ auth, category, users }) {
   const { data, setData, post, errors, reset } = useForm({
     image: "",
     name: "",
@@ -51,7 +51,7 @@ export default function Create({ auth, categories, users }) {
                   onChange={(e) => setData("category_id", e.target.value)}
                 >
                   <option value="">Select Category</option>
-                  {categories.data.map((category) => (
+                  {category.data.map((category) => (
                     <option value={category.id} key={category.id}>
                       {category.name}
                     </option>

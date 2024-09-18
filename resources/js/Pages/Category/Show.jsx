@@ -1,9 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
-import {
-  CATEGORY_STATUS_CLASS_MAP,
-  CATEGORY_STATUS_TEXT_MAP,
-} from "@/constants.jsx";
+
 import ChallengesTable from "@/Pages/Challenge/ChallengesTable.jsx";
 export default function Show({ auth, success, category, challenges, queryParams }) {
   return (

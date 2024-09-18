@@ -39,17 +39,18 @@ export default function Create({ auth, challenge, categories, users }) {
       <Head title="Challenges" />
 
       <div className="py-12">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <form
               onSubmit={onSubmit}
               className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg"
             >
-              {challenge.image_path && (
-                <div className="mb-4">
-                  <img src={challenge.image_path} className="w-64" />
-                </div>
-              )}
+              {/*{challenge.image_path && (*/}
+              {/*  <div className="mb-4">*/}
+              {/*    <img src={challenge.image_path} className="w-64" />*/}
+              {/*  </div>*/}
+              {/*)}*/}
+                <div className="grid grid-cols-2 gap-5">
               <div>
                 <InputLabel htmlFor="challenge_category_id" value="Category" />
 
@@ -57,7 +58,7 @@ export default function Create({ auth, challenge, categories, users }) {
                   name="category_id"
                   id="challenge_category_id"
                   value={data.category_id}
-                  className="mt-1 block w-full"
+                  className="mt-1 block w-full "
                   onChange={(e) => setData("category_id", e.target.value)}
                 >
                   <option value="">Select Category</option>
@@ -70,18 +71,7 @@ export default function Create({ auth, challenge, categories, users }) {
 
                 <InputError message={errors.category_id} className="mt-2" />
               </div>
-              <div className="mt-4">
-                <InputLabel htmlFor="challenge_image_path" value="Challenge Image" />
-                <TextInput
-                  id="challenge_image_path"
-                  type="file"
-                  name="image"
-                  className="mt-1 block w-full"
-                  onChange={(e) => setData("image", e.target.files[0])}
-                />
-                <InputError message={errors.image} className="mt-2" />
-              </div>
-              <div className="mt-4">
+              <div className="">
                 <InputLabel htmlFor="challenge_name" value="Challenge Name" />
 
                 <TextInput
@@ -96,23 +86,7 @@ export default function Create({ auth, challenge, categories, users }) {
 
                 <InputError message={errors.name} className="mt-2" />
               </div>
-              <div className="mt-4">
-                <InputLabel
-                  htmlFor="challenge_description"
-                  value="Challenge Description"
-                />
-
-                <TextAreaInput
-                  id="challenge_description"
-                  name="description"
-                  value={data.description}
-                  className="mt-1 block w-full"
-                  onChange={(e) => setData("description", e.target.value)}
-                />
-
-                <InputError message={errors.description} className="mt-2" />
-              </div>
-              <div className="mt-4">
+              <div className="">
                 <InputLabel htmlFor="challenge_due_date" value="Challenge Deadline" />
 
                 <TextInput
@@ -126,7 +100,7 @@ export default function Create({ auth, challenge, categories, users }) {
 
                 <InputError message={errors.due_date} className="mt-2" />
               </div>
-              <div className="mt-4">
+              <div className="">
                 <InputLabel htmlFor="challenge_status" value="Challenge Status" />
 
                 <SelectInput
@@ -145,7 +119,7 @@ export default function Create({ auth, challenge, categories, users }) {
                 <InputError message={errors.challenge_status} className="mt-2" />
               </div>
 
-              <div className="mt-4">
+              <div className="">
                 <InputLabel htmlFor="challenge_priority" value="Challenge Priority" />
 
                 <SelectInput
@@ -164,7 +138,7 @@ export default function Create({ auth, challenge, categories, users }) {
                 <InputError message={errors.difficulty} className="mt-2" />
               </div>
 
-              <div className="mt-4">
+              <div className="">
                 <InputLabel
                   htmlFor="challenge_assigned_user"
                   value="Assigned User"
@@ -190,15 +164,43 @@ export default function Create({ auth, challenge, categories, users }) {
                   className="mt-2"
                 />
               </div>
+              <div className="">
+                <InputLabel
+                  htmlFor="challenge_description"
+                  value="Challenge Description"
+                />
 
-              <div className="mt-4 text-right">
+                <TextAreaInput
+                  id="challenge_description"
+                  name="description"
+                  value={data.description}
+                  className="mt-1 block w-full"
+                  onChange={(e) => setData("description", e.target.value)}
+                />
+
+                <InputError message={errors.description} className="mt-2" />
+              </div>
+              <div className="">
+                <InputLabel htmlFor="challenge_image_path" value="Challenge Image" />
+                <TextInput
+                  id="challenge_image_path"
+                  type="file"
+                  name="image"
+                  className="mt-1 block w-full"
+                  onChange={(e) => setData("image", e.target.files[0])}
+                />
+                <InputError message={errors.image} className="mt-2" />
+              </div>
+
+                </div>
+              <div className="pt-2 text-center">
                 <Link
                   href={route("challenge.index")}
-                  className="bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2"
+                  className="bg-gray-100 py-1 px-3 text-gray-800 hover:text-gray-50 rounded shadow transition-all hover:bg-black mr-2"
                 >
                   Cancel
                 </Link>
-                <button className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600">
+                <button className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-800">
                   Submit
                 </button>
               </div>

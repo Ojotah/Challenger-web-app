@@ -10,7 +10,6 @@ export default function Create({ auth }) {
   const { data, setData, post, errors, reset } = useForm({
     image: "",
     name: "",
-    status: "",
     description: "",
     due_date: "",
   });
